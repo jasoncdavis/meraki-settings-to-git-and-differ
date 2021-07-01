@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>DevNet Dashboards</title>
+	<style>		
+		/*html, body {margin: 0; height: 100%; overflow: hidden}*/
+		
+		.center {
+			  margin: auto;
+			  width: 85%;
+			  padding: 10px;
+			  text-align: center;
+		
+		}
+		
+		.tablecenter {
+			margin: auto;
+			width: 85%;
+			cellspacing: 2;
+			cellpadding: 2;
+		}
+		  
+		/* Style the tab */
+		.tab {
+			overflow: hidden;
+			border: 1px solid #ccc;
+			background-color: #f1f1f1;
+		}
+		
+		/* Style the buttons inside the tab */
+		.tab button {
+			background-color: inherit;
+			float: left;
+			border: none;
+			outline: none;
+			cursor: pointer;
+			padding: 14px 16px;
+			transition: 0.3s;
+			font-size: 17px;
+		}
+		
+		/* Change background color of buttons on hover */
+		.tab button:hover {
+			background-color: #ddd;
+		}
+		
+		/* Create an active/current tablink class */
+		.tab button.active {
+			background-color: #ccc;
+		}
+		
+		/* Style the tab content */
+		.tabcontent {
+			display: none;
+			padding: 6px 12px;
+			border-top: none;
+		}
+		
+	</style>
+</head>
+<body>
+<div>
+	<div class="pagetop">
+		<div class="tab">
+			<button class="tablinks" onclick="openTab(event, 'Summary')" id="defaultOpen">Meraki Scan<br>Summary</button>
+			<button class="tablinks" onclick="openTab(event, 'LastDiff')" id="myButton">Last<br>Diff</button> 
+		</div>
+<!-- START Summary tab info -->
+		<div id="Summary" class="tabcontent center">
+			<h1>
+				Inventory 
+			</h1>
+			Last Scan: 
+<!-- Last Scan DateTime -->
+			Day, Month DD, YYYY at HH:MM:SS <br>
+			<br>
+			<table class="tablecenter">
+				<tbody>
+					<tr>
+						<td valign="top">Organization </td>
+						<td valign="top">Networks </td>
+						<td valign="top">Devices </td>
+						<td valign="top">Settings </td>
+					</tr>
+					<tr>
+						<td valign="top"><img style="max-width:100px" src="/DevNetDashboards/img/Networking_mid_512.png"> </td>
+						<td valign="top"><img style="max-width:100px" src="/DevNetDashboards/img/nir_fc_512.png"> </td>
+						<td valign="top"><img style="max-width:100px" src="/DevNetDashboards/img/Devices_mid_512.png"> </td>
+						<td valign="top"><img style="max-width:100px" src="/DevNetDashboards/img/Settings_mid_512.png"> </td>
+					</tr>
+					<tr>
+						<td valign="top">Org Id: </td>
+						<td valign="top">Count Last Scan </td>
+						<td valign="top">Count Last Scan </td>
+						<td valign="top">Count Last Scan </td>
+					</tr>
+					<tr>
+						<td valign="top"><!-- OrgId -->######<br>
+<!-- OrgName -->NaN </td>
+						<td valign="top"><!-- NetworksLastCount --># </td>
+						<td valign="top"><!-- DevicesLastCount --># </td>
+						<td valign="top"><!-- SettingsLastCount --># </td>
+					</tr>
+				</tbody>
+			</table>
+			<br>
+			<br>
+<!-- START Settings Scans table -->
+			<table class="tablecenter">
+				<tbody>
+					<tr align="center">
+						<td colspan="2" bgcolor="#003366" valign="top"><font color="#ffffff">Meraki Settings Scans (last 10) </font></td>
+					</tr>
+					<tr>
+						<td bgcolor="#0099cc" valign="top"><font color="#ffffff">Commit Hash</font></td>
+						<td bgcolor="#0099cc" valign="top"><font color="#ffffff">Commit Message</font></td>
+					</tr>
+<!-- Insert Settings Scans Record HERE -->
+				</tbody>
+			</table>
+			<br>
+			<table class="tablecenter">
+				<tbody>
+					<tr align="center">
+						<td rowspan="1" colspan="6" bgcolor="#003366" valign="top"><font color="#ffffff">Diff Reports<br>
+						</font></td>
+					</tr>
+					<tr>
+						<td rowspan="2" colspan="1" bgcolor="#0099cc" valign="top"><font color="#ffffff">Report Run Date/Time<br>
+						</font></td>
+						<td rowspan="1" colspan="2" bgcolor="#0099cc" align="center" valign="top"><font color="#ffffff">Commit-A<br>
+						</font></td>
+						<td rowspan="1" colspan="2" bgcolor="#0099cc" align="center" valign="top"><font color="#ffffff">Commit-B<br>
+						</font></td>
+					</tr>
+					<tr>
+						<td bgcolor="#0099cc" valign="top"><font color="#ffffff">Hash<br>
+						</font> </td>
+						<td bgcolor="#0099cc" valign="top"><font color="#ffffff">Datetime<br>
+						</font> </td>
+						<td bgcolor="#0099cc" valign="top"><font color="#ffffff">Hash<br>
+						</font> </td>
+						<td bgcolor="#0099cc" valign="top"><font color="#ffffff">Datetime<br>
+						</font> </td>
+					</tr>
+<!-- Insert New Diff Record as Table Row HERE -->
+				</tbody>
+			</table>
+<!-- END Historical Reports table -->
+		</div>
+<!-- END Summary tab info -->
+<!-- START Latest Diff List tab info -->
+		<div id="LastDiff" class="tabcontent">
+<!-- START Last Diffs Report Summary table -->
+<!-- END Last Diffs Report Summary table -->
+		</div>
+		<script>
+			// Get the element with id="defaultOpen" and click on it
+			document.getElementById("defaultOpen").click();
+			
+			// Open tab based on click
+			function openTab(evt, tabName) {
+			  var i, tabcontent, tablinks;
+			  tabcontent = document.getElementsByClassName("tabcontent");
+			  for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			  }
+			  tablinks = document.getElementsByClassName("tablinks");
+			  for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].className = tablinks[i].className.replace(" active", "");
+			  }
+			  document.getElementById(tabName).style.display = "block";
+			  evt.currentTarget.className += " active";
+			}
+		</script>
+	</div>
+</div>
+</body>
+</html>
