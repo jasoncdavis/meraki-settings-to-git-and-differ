@@ -1,4 +1,4 @@
-{{Meraki Settings Archive & Differ}}
+Meraki Settings Archive & Differ
 =====================================
 
 The Meraki Settings Archive & Differ project extracts Meraki device settings from the Meraki Dashboard API, stores as JSON files in a local git repo and creates web pages showing differences betweeen scans in colorized form.
