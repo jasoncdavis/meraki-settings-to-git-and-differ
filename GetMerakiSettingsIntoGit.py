@@ -1137,7 +1137,7 @@ def update_org_scans_page(org_id, org_name, date_time_verbose, netcount, devicec
     if not os.path.exists(f'{env.web_publishing_dir}/img/'): 
         os.makedirs(f'{env.web_publishing_dir}/img/')
         # Copy missing images
-        fromDirectory = os.path.realpath(__file__).replace(os.path.basename(__file__), 'html/')
+        fromDirectory = os.path.realpath(__file__).replace(os.path.basename(__file__), 'images/')
         toDirectory = f'{env.web_publishing_dir}/img/'
         copy_tree(fromDirectory, toDirectory)
 
