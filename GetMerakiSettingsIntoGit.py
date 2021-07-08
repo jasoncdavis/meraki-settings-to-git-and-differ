@@ -28,6 +28,8 @@ v3      2021-0421   Refactor to work with single customer/orgid for
 DevNet Automation Exchange
 v4      2021-0514   Refactor, increased doco in preparation for
 DevNet Automation Exchange publishing
+v5      2021-0708   Fixed logs directory checker; added missing
+web report images
 
 Credits:
 EXTREME amounts of credit goes to Maria Papazoglou (GitHub @mpapazog)
@@ -40,7 +42,7 @@ but she had a more elegant approach that also included OpenAPI parsing,
 so I forked her work and added the github archiving function.
 Thank you Maria!
 """
-__version__ = '4'
+__version__ = '5'
 __author__ = 'Jason Davis - jadavis@cisco.com'
 __license__ = "Cisco Sample Code License, Version 1.1 - https://developer.cisco.com/site/license/cisco-sample-code-license/"
 
@@ -62,6 +64,7 @@ import re
 import subprocess
 import math
 import requests
+from distutils.dir_util import copy_tree
 
 from meraki.config import API_KEY_ENVIRONMENT_VARIABLE, OUTPUT_LOG
 import GMSIGconfig as env
@@ -70,7 +73,7 @@ import GMSIGconfig as env
 # Module variables
 # Configure API_KEY if setting inside Python script, otherwise set environment variable as describes in readme above
 # eg 40 character API_KEY = '1234567890abcdef1234567890abcdef12345678'
-API_KEY = ''
+API_KEY = env.api_key
 
 log_path = "logs"  # Using a subordinate directory from location of Python script called 'logs' - change to suite
 
@@ -1089,18 +1092,17 @@ def update_org_scan_log(org_id):
     os.chdir(f'{env.meraki_base_path}/{str(org_id)}/settings/')
     gitcommits = subprocess.run("git log -n 11 --pretty=oneline", shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
     gitcommitlist = gitcommits.stdout.splitlines()
-    gitcommitlist.pop()
+    if len(gitcommitlist) > 10:
+        gitcommitlist.pop()
 
     tablerows = ""
     for commit in gitcommitlist:
-        #print(commit)
-        matchCommit = re.search(r"^(\w+) \'(.*)\'$", commit, re.M)
+        matchCommit = re.search(r"^(\w+) (.*)$", commit, re.M)
         tablerow = f'''							<tr>
 								<td>{matchCommit.group(1)}</td>
 								<td>{matchCommit.group(2)}</td>
 							</tr>
 '''
-        #print(tablerow)
         tablerows += tablerow
     
     orgwebpage = f'{env.web_publishing_dir}/orgs/{org_id}/index.html'
@@ -1132,14 +1134,24 @@ def update_org_scans_page(org_id, org_name, date_time_verbose, netcount, devicec
     """
     print("Updating org-specific webpage")
     if not os.path.exists(f'{env.web_publishing_dir}/orgs/{org_id}'): os.makedirs(f'{env.web_publishing_dir}/orgs/{org_id}') 
+    if not os.path.exists(f'{env.web_publishing_dir}/img/'): 
+        os.makedirs(f'{env.web_publishing_dir}/img/')
+        # Copy missing images
+        fromDirectory = os.path.realpath(__file__).replace(os.path.basename(__file__), 'html/')
+        toDirectory = "f'{env.web_publishing_dir}/img/'"
+        copy_tree(fromDirectory, toDirectory)
+
     # Read in org-specific page
     orgwebpage = f'{env.web_publishing_dir}/orgs/{org_id}/index.html'
     if not os.path.exists(orgwebpage):
-        print(os.path.realpath(__file__))
-        print(os.path.basename(__file__))
+        #print(os.path.realpath(__file__))
+        #print(os.path.basename(__file__))
         orgtemplate = os.path.realpath(__file__).replace(os.path.basename(__file__), 'html/templ-org-index.html')
-        print(orgtemplate)
-        shutil.copyfile(orgtemplate, orgwebpage) 
+        with open(orgtemplate, 'r') as fr:
+            webtemplate = fr.read()
+        newtemplate = webtemplate.replace('###WEBPUBDIR###', f'{env.web_url}')
+        with open(orgwebpage, 'w') as fw:
+            fw.write(newtemplate)
 
     with open(orgwebpage, "r") as inputfile:
         filecontent = inputfile.read()
@@ -1183,14 +1195,20 @@ def main(args):
     date_time = now.strftime("%Y%m%d-%H%M%S")
     date_time_verbose = now.strftime("%A, %B %d, %Y at %H:%M:%S %Z")
     
+    # Ensure logs directory exists
+    if not os.path.exists(f'{log_path}'): os.makedirs(f'{log_path}') 
+
+    api_key = os.environ.get('MERAKI_DASHBOARD_API_KEY')
+    if api_key == None:
+        if API_KEY == '':
+            sys.exit('MERAKI_DASHBOARD_API_KEY or environment parameters not set')
+        else:
+            api_key = API_KEY
+
     if args.command == 'listorgs':
         get_orgs('ALL')
     elif args.command == 'getsettings':
         start_time = datetime.now()
-        if os.environ.get('MERAKI_DASHBOARD_API_KEY'):
-            api_key = os.environ.get('MERAKI_DASHBOARD_API_KEY')
-        else:
-            api_key = API_KEY
         org_name = get_orgs(args.orgid)
         check_orgdir_status(args.orgid)
         check_git_status(args.orgid, org_name)
