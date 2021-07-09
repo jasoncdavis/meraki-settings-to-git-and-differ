@@ -28,9 +28,13 @@ Outputs:
     create diff report in web format to web publishing directory 
     (eg. /var/www/html)
 
+Version log
+v1      2021-0701   Released to DevNet Automation Exchange
+v2      2021-0709   Enhancements to run in a docker container
+
 """
 
-__version__ = '1'
+__version__ = '2'
 __author__ = 'Jason Davis - jadavis@cisco.com'
 __license__ = "Cisco Sample Code License, Version 1.1 - https://developer.cisco.com/site/license/cisco-sample-code-license/"
 
@@ -49,6 +53,10 @@ from inspect import getsourcefile
 
 
 # Module variables
+# Configure API_KEY if setting inside Python script, otherwise set environment variable as describes in readme above
+# eg 40 character API_KEY = '1234567890abcdef1234567890abcdef12345678'
+API_KEY = env.api_key
+
 log_path = "logs"
 
 ########################################
@@ -403,9 +411,17 @@ def main():
     now = datetime.now() # current date and time
     date_time = now.strftime("%Y%m%d-%H%M%S")
     date_time_verbose = now.strftime("%A, %B %d, %Y at %H:%M:%S %Z")
+
+    api_key = os.environ.get('MERAKI_DASHBOARD_API_KEY')
+    if api_key == None:
+        if API_KEY == '':
+            sys.exit('MERAKI_DASHBOARD_API_KEY or environment parameters not set')
+        else:
+            api_key = API_KEY
+
     args = parse_input_arguments()
     if args.command == 'listorgs':
-        print('Please waiting, processing Meraki API data...')
+        print('Please wait, processing Meraki API data...')
         get_orgs('ALL')
     elif args.command == 'listcommits':
         orgname=get_orgs(args.orgid)
