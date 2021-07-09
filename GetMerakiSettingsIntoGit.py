@@ -551,7 +551,6 @@ def commit_processed_files(org_id):
     now = datetime.now()
     scanfinish_datetime = now.strftime("%Y-%m-%d--%H-%M")
     date_time_verbose = now.strftime("%A, %B %d, %Y at %H:%M:%S %Z")
-
     git_repo_path = f'{env.git_base_path}/{org_id}/settings'
     # Add all files to repo and commit
     repo = git.Repo(git_repo_path)
@@ -559,11 +558,11 @@ def commit_processed_files(org_id):
     try:
         repo.git.commit('-m',f"'Commit from Meraki scan finished on {date_time_verbose}'")
     except git.exc.GitCommandError as e:
-        print(f'Git commit returned error {e.stdout}')
+        #print(f'Git commit returned error {e.stdout}')
+        print(f'Git commit error: {e}')
     print(f'Repo description: {repo.description}')
     print(f'Repo active branch is {repo.active_branch}')
     print(f'Repo status is {repo.git.status()}')
-
 
     scanrecord = f"""{{
 "scanend": "{scanfinish_datetime}",
@@ -783,6 +782,8 @@ def check_git_status(orgid, orgname):
     except git.exc.InvalidGitRepositoryError:
         print(f'Could not find existing git repository at {env.git_base_path}/{orgid}/settings')
         mrepo = git.Repo.init(f'{env.git_base_path}/{orgid}/settings')
+        mrepo.config_writer().set_value("user", "name", git_user_name).release()
+        mrepo.config_writer().set_value("user", "email", git_user_email).release()
         mrepo.description = f'Meraki settings git repo for {orgname} with orgid {orgid}'
         print(f'Created git repository at {env.git_base_path}/{orgid}/settings/.git')
         open(f'{env.git_base_path}/{orgid}/settings/repo_init', 'w').close()
