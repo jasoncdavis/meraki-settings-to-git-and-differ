@@ -1,0 +1,17 @@
+version: "3.9"
+   
+services:
+  web:
+    build: apache
+    volumes:
+      - ./msaad-vol/apache-data:/usr/local/apache2/htdocs/
+    ports:
+      - 8080:80
+    
+  python:
+    build: python
+    volumes:
+      - ./msaad-vol/git-data:/opt/MerakiGit      
+      - ./msaad-vol/apache-data:/apache-data
+    stdin_open: true
+    tty: true

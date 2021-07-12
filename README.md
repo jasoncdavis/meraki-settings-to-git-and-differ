@@ -27,14 +27,11 @@ Meraki equipment is cloud-managed and access via the Meraki web portal. It doesn
 
 Difference scans can be initiated against latest and previous scan (git HEAD and HEAD~1) or any combination of scanned instances.  Difference reports are logged to a summary web page for easy reference with clickable links to the specific difference scan results.  Individual different reports show all feature category changes, eg. orgAdministrators, and can be individually clicked for review, showing differences in a colorized side-by-side report.
 
-## Video Reference
-
-[Meraki Settings Archive & Differ](https://video.cisco.com/***XYZ) video
-
 
 ## Installation
 
-It is suggested to run this project in its own Linux Virtual Machine.  Development was done on CentOS Stream 8.3, but releases at or above the 7 train or other Linux variants should be fine.
+Two options are provided: self-directed installation with requirements OR Docker.  Pick whichever suites your preference, security requirements and deployment capabilities.
+When running as a self-directed installation with requirements, it is suggested to run this project in its own Linux Virtual Machine.  Development was done on CentOS Stream 8.3, but releases at or above the 7 train or other Linux variants should be fine.
 Additionally, Apache and Python environments should be installed - CentOS may have provided one in your installation.  Our guidance is to keep the system-supplied version and install the latest Python and use virtual environments (venv) to maintain separation of environments from the core operating system.  Our development was done on Python v3.9.1, but anything above v3.7 should be sufficient.
  
 ### Local, Linux-specific Installations:
@@ -81,7 +78,10 @@ Unzip the repo files into this MerakiGit folder or use git to clone the repo loc
 </code></pre>
 
 ### Docker Installations:
-Future To-do
+Ensure you have docker and docker-compose installed in your environment.  In the project's [docker](./docker/) directory is the [docker-compose.yaml](./docker/docker-compose-yaml) file which defines the environment's service requirements.  Essentially, Apache and Python images are created.  Remember your first time running 'docker-compose up' will require some time to download images from standard repositories.
+For the docker image we will mount a [msaad-vol](./docker/msaad-vol) directory which maintains the dynamic content for the Apache we server and the git repo.  Ensure you monitor the host system's file storage.  Development was done with about 20G disk space and easily managed a Meraki environment of over 3,000 networks and devices.  Make sure the [GMSIGconfig.py](./src/GMSIGconfig.py) file has the web_publishing_dir variable set to '/apache-data/DevNetDashboards/MerakiGit' as the default is '/var/www/html/DevNetDashboards/MerakiGit', which is suited for local installs.  Follow the remaining instructions for setting Meraki Dashboard API key and setting up cron job inside the Python container.
+Access the Python container from the host server running docker, with 'docker exec -it msaad_python_1 /bin/sh'
+
 
 ## Configuration
 
