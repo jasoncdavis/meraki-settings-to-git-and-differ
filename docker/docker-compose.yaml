@@ -1,17 +1,23 @@
 version: "3.9"
-   
+
 services:
   web:
     build: apache
+    image: msaad_apache:latest
+    hostname: web-server
     volumes:
       - ./msaad-vol/apache-data:/usr/local/apache2/htdocs/
     ports:
       - 8080:80
-    
+
   python:
-    build: python
+    build:
+      context: ../
+      dockerfile: ./docker/python/Dockerfile
+    image: msaad_python:latest
+    hostname: python-server
     volumes:
-      - ./msaad-vol/git-data:/opt/MerakiGit      
+      - ./msaad-vol/git-data:/opt/MerakiGit
       - ./msaad-vol/apache-data:/apache-data
     stdin_open: true
     tty: true
