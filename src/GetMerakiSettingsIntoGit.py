@@ -303,7 +303,7 @@ async def archive_ms_profiles(dashboard, templates):
         template_name = template['name']
         net_id = template['id']
 
-        file_path = f'networks/{template_name} - {net_id}'
+        file_path = f'networks/{net_id} - {template_name}'
 
         operation = 'getOrganizationConfigTemplateSwitchProfiles'
         file_name = f'{generate_file_name(operation)}'
@@ -343,7 +343,7 @@ async def archive_ms_profile_ports(dashboard, templates):
         template_name = template['name']
         net_id = template['id']
 
-        file_path = f'networks/{template_name} - {net_id}'
+        file_path = f'networks/{net_id} - {template_name}'
 
         if os.path.exists(f'{file_path}/org_ConfigTemplateSwitchProfiles.json'):
             with open(f'{file_path}/org_ConfigTemplateSwitchProfiles.json') as fp:

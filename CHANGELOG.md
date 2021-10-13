@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 Date | Revision | Contributor(s) | Purpose
 ------------ | ------------- | ------------ | -------------
 July 1, 2021 | v1 | Jason Davis (jadavis@cisco.com) | Initial release to Cisco DevNet Automation Exchange
+Oct 12, 2021 | v2 | Jason Davis (jadavis@cisco.com) | Fix file naming structure related to templates
 
 
 # Details
