@@ -78,8 +78,8 @@ Unzip the repo files into this MerakiGit folder or use git to clone the repo loc
 </code></pre>
 
 ### Docker Installations:
-Ensure you have docker and docker-compose installed in your environment.  In the project's [docker](./docker/) directory is the [docker-compose.yaml](./docker/docker-compose-yaml) file which defines the environment's service requirements.  Essentially, Apache and Python images are created.  Remember your first time running 'docker-compose up' will require some time to download images from standard repositories.
-For the docker image we will mount a [msaad-vol](./docker/msaad-vol) directory which maintains the dynamic content for the Apache we server and the git repo.  Ensure you monitor the host system's file storage.  Development was done with about 20G disk space and easily managed a Meraki environment of over 3,000 networks and devices.  Make sure the [GMSIGconfig.py](./src/GMSIGconfig.py) file has the web_publishing_dir variable set to '/apache-data/DevNetDashboards/MerakiGit' as the default is '/var/www/html/DevNetDashboards/MerakiGit', which is suited for local installs.  Follow the remaining instructions for setting Meraki Dashboard API key and setting up cron job inside the Python container.
+Ensure you have docker and docker-compose installed in your environment.  In the project's [docker](./docker/) directory is the [docker-compose.yaml](./docker/docker-compose.yaml) file which defines the environment's service requirements.  Essentially, Apache and Python images are created.  Remember your first time running 'docker-compose up' will require some time to download images from standard repositories.
+For the docker image we will mount a **msaad-vol** directory which maintains the dynamic content for the Apache we server and the git repo.  Ensure you monitor the host system's file storage.  Development was done with about 20G disk space and easily managed a Meraki environment of over 3,000 networks and devices.  Make sure the [GMSIGconfig.py](./src/GMSIGconfig.py) file has the web_publishing_dir variable set to '/apache-data/DevNetDashboards/MerakiGit' as the default is '/var/www/html/DevNetDashboards/MerakiGit', which is suited for local installs.  Follow the remaining instructions for setting Meraki Dashboard API key and setting up cron job inside the Python container.
 Access the Python container from the host server running docker, with 'docker exec -it msaad_python_1 /bin/sh'
 
 
@@ -104,7 +104,7 @@ Restart your shell and observe the correct settings:
 
 ## Usage
 
-There are two main Python scripts for the project, [GetMerakiSettingsIntoGit.py](./GetMerakiSettingsIntoGit.py) and [CreateMerakiGitDiffWebreport.py](CreateMerakiGitDiffWebreport.py)
+There are two main Python scripts for the project, [GetMerakiSettingsIntoGit.py](./src/GetMerakiSettingsIntoGit.py) and [CreateMerakiGitDiffWebreport.py](./src/CreateMerakiGitDiffWebreport.py)
 The GetMerakiSettingsIntoGit.py extracts the Meraki settings and stores them in the local git repository [the repo is created, if needed].
 The CreateMerakiGitDiffWebreport.py file is run afterwards, as desired, to generate the difference report web pages.
 Both scripts are executed at the command line.  
