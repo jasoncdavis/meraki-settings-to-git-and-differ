@@ -267,3 +267,5 @@ The terms can be viewed at https://developer.cisco.com/site/license/cisco-sample
 ## Best practices
 Run the GetMerakiSettingsIntoGit script a few times before attempting to generate a diff.
 Observe how long the GetMerakiSettingsIntoGit script runs, then schedule the CreateMerakiGitDiffWebreport with some buffer time between executions in cron.
+
+[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/jasoncdavis/meraki-settings-to-git-and-differ)
